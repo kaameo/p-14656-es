@@ -7,6 +7,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,13 +29,14 @@ public class ApiV1CommentController {
             @NotBlank(message = "Author must not be blank")
             @Size(max = 50, min = 1)
             String author
-    ) {}
+    ) {
+    }
 
     @PostMapping("")
     public ResponseEntity<Comment> create(
             @PathVariable String postId,
             @RequestBody @Valid CreateCommentRequest request
-    ){
+    ) {
         Comment comment = commentService.create(
                 postService.findById(postId),
                 request.content,
@@ -50,20 +54,21 @@ public class ApiV1CommentController {
     }
 
     @GetMapping("/{id}")
-    public Comment findById(
+    public Page<Comment> findByPostId(
             @PathVariable String postId,
-            @PathVariable String id
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        // Post 존재 여부 확인
-        postService.findById(postId);
-        return commentService.findById(id);
+        Pageable pageable = PageRequest.of(page, size);
+        return commentService.findByPostId(postId, pageable);
     }
 
     public record UpdateCommentRequest(
             @NotBlank(message = "Content must not be blank")
             @Size(max = 500, min = 1)
             String content
-    ) {}
+    ) {
+    }
 
     @PutMapping("/{id}")
     public Comment update(
