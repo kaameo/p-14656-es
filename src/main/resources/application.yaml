@@ -1,6 +1,8 @@
 spring:
   application:
     name: p-14656-es
+  profiles:
+    active: dev
   output:
     ansi:
       enabled: always
