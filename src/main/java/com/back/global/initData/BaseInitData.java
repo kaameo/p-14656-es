@@ -25,6 +25,7 @@ public class BaseInitData {
             work4();
             work5();
             work6();
+            work7();
         };
     }
 
@@ -49,14 +50,14 @@ public class BaseInitData {
         }
     }
 
-    private void work3(){
+    private void work3() {
         log.debug("Post 단건 조회");
         for (Post post : postService.findAll()) {
             log.debug("조회된 Post: {}", post);
         }
     }
 
-    private void work4(){
+    private void work4() {
         log.debug("Post 단건 수정");
         for (Post post : postService.findAll()) {
             String newTitle = post.getTitle() + " [Updated]";
@@ -66,7 +67,7 @@ public class BaseInitData {
         }
     }
 
-    private void work5(){
+    private void work5() {
         log.debug("Post 삭제");
         for (Post post : postService.findAll()) {
             postService.delete(post.getId());
@@ -86,6 +87,13 @@ public class BaseInitData {
                 var comment = commentService.create(post, content, author);
                 log.debug("Created Comment: {}", comment);
             }
+        }
+    }
+
+    private void work7() {
+        log.debug("기존 Comment 전체 조회");
+        for (var comment : commentService.findAll()) {
+            log.debug("Existing Comment: {}", comment);
         }
     }
 }
