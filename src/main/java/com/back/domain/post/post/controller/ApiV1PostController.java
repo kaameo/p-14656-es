@@ -71,4 +71,11 @@ public class ApiV1PostController {
                 updatePostRequest.content
         );
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        postService.delete(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
