@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/posts/{postId}/comments")
 @RequiredArgsConstructor
@@ -40,5 +42,11 @@ public class ApiV1CommentController {
         return ResponseEntity.status(201).body(comment);
     }
 
+    @GetMapping
+    public List<Comment> findByPostId(@PathVariable String postId) {
+        // Post 존재 여부 확인
+        postService.findById(postId);
+        return commentService.findByPostId(postId);
+    }
 
 }
