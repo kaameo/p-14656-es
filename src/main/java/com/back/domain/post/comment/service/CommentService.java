@@ -52,4 +52,15 @@ public class CommentService {
     public void delete(Comment comment) {
         commentRepository.delete(comment);
     }
+
+    public Page<Comment> search(String postId, String keyword, String searchType, Pageable pageable) {
+        return switch (searchType) {
+            case "content" -> commentRepository.findByPostIdAndContentContaining(postId, keyword, pageable);
+            case "author" -> commentRepository.findByPostIdAndAuthor(postId, keyword, pageable);
+            case "contentAndAuthor" -> commentRepository.findByPostIdAndContentContainingOrPostIdAndAuthor(
+                    postId, keyword, postId, keyword, pageable
+            );
+            default -> commentRepository.findByPostId(postId, pageable);
+        };
+    }
 }
