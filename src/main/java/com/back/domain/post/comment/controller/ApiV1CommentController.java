@@ -49,4 +49,13 @@ public class ApiV1CommentController {
         return commentService.findByPostId(postId);
     }
 
+    @GetMapping("/{id}")
+    public Comment findById(
+            @PathVariable String postId,
+            @PathVariable String id
+    ) {
+        // Post 존재 여부 확인
+        postService.findById(postId);
+        return commentService.findById(id);
+    }
 }
