@@ -26,12 +26,22 @@ public class ApiV1PostController {
             String content,
             @NotBlank(message = "Author must not be blank")
             String author
-    ){}
+    ) {
+    }
+
+    record UpdatePostRequest(
+            @NotBlank(message = "Title must not be blank")
+            @Size(max = 100, min = 1)
+            String title,
+            @NotBlank(message = "Content must not be blank")
+            String content
+    ) {
+    }
 
     @PostMapping
     public ResponseEntity<Post> create(
             @RequestBody @Valid CreatePostRequest request
-    ){
+    ) {
         Post post = postService.create(
                 request.title,
                 request.content,
@@ -41,12 +51,24 @@ public class ApiV1PostController {
     }
 
     @GetMapping
-    public List<Post> findAll(){
+    public List<Post> findAll() {
         return postService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Post findById(@PathVariable String id){
+    public Post findById(@PathVariable String id) {
         return postService.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Post update(
+            @PathVariable String id,
+            @RequestBody @Valid UpdatePostRequest updatePostRequest
+    ) {
+        return postService.update(
+                id,
+                updatePostRequest.title,
+                updatePostRequest.content
+        );
     }
 }
